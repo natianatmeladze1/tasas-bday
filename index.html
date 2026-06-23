@@ -38,7 +38,7 @@
                 radial-gradient(rgba(255,182,193,0.4), rgba(255,182,193,0.1) 3px, transparent 30px);
             background-size: 120px 120px, 150px 150px;
             background-position: 0 0, 40px 60px;
-            opacity: 0.25; /* მინიმალისტური და შეუმჩნეველი, რომ ტექსტი გამოჩნდეს */
+            opacity: 0.25; /* მინიმალისტური და შეუმჩნეველი */
             z-index: 1;
             pointer-events: none;
         }
@@ -52,7 +52,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-bottom: 50px;
+            padding-bottom: 80px; /* ადგილი მუსიკის ღილაკისთვის */
         }
 
         /* ძაფზე ჩამოკიდებული ფოტოების სექცია */
@@ -114,7 +114,7 @@
             display: block;
         }
 
-        /* ფოტოების სხვადასხვა კუთხით დახრა რეალისტურობისთვის */
+        /* ფოტოების სხვადასხვა კუთხით დახრა */
         .photo-1 { transform: rotate(-6deg); }
         .photo-2 { transform: rotate(4deg); padding-top: 12px; }
         .photo-3 { transform: rotate(-3deg); }
@@ -154,12 +154,12 @@
             white-space: pre-line; /* ინარჩუნებს აბზაცებს */
         }
 
-        /* ბოლო სასაცილო ფოტოს სექცია */
+        /* ბოლო სასაცილო ფოტოები */
         .funny-photo-container {
             width: 100%;
             display: flex;
             justify-content: center;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .funny-photo {
@@ -170,27 +170,77 @@
             transition: transform 0.3s ease;
         }
 
-        .funny-photo:active {
-            transform: scale(0.98);
+        /* მუსიკის მართვის ღილაკი */
+        #music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(224, 176, 255, 0.2);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 12px 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        #music-control:hover {
+            background: rgba(224, 176, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* მოციმციმე ანიმაცია */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(224, 176, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(224, 176, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(224, 176, 255, 0); }
+        }
+
+        /* იკონკა მუსიკისთვის */
+        .music-icon {
+            width: 16px;
+            height: 16px;
+            background: white;
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>') no-repeat center;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>') no-repeat center;
         }
     </style>
 </head>
 <body>
+
+    <!-- აუდიო ელემენტი (სიმღერა იტვირთება YouTube-ის სერვერიდან) -->
+    <audio id="myAudio" loop>
+        <source src="https://cdn.jsdelivr.net/gh/tbilisiphoto/music/slipping.mp3" type="audio/mpeg">
+        შენი ბრაუზერი არ უჭერს მხარს აუდიოს.
+    </audio>
+
+    <!-- მუსიკის ღილაკი -->
+    <button id="music-control" onclick="toggleMusic()">
+        <div class="music-icon"></div>
+        <span id="music-text">ჩართე მუსიკა ✨</span>
+    </button>
 
     <div class="wrapper">
 
         <!-- 1. ძაფზე ჩამოკიდებული ფოტოები -->
         <div class="photo-string">
             <div class="polaroid photo-1">
-                <!-- ჩასვი პირველი ფოტოს ლინკი src-ში -->
                 <img src="2.jpg" alt="Tasa 1">
             </div>
             <div class="polaroid photo-2">
-                <!-- ჩასვი მეორე ფოტოს ლინკი src-ში -->
                 <img src="IMG_20210828_101412_180.jpg" alt="Tasa 2">
             </div>
             <div class="polaroid photo-3">
-                <!-- ჩასვი მესამე ფოტოს ლინკი src-ში -->
                 <img src="IMG_20210828_103710_036.jpg" alt="Tasa 3">
             </div>
         </div>
@@ -200,28 +250,48 @@
 
         <!-- 3. მილოცვის ტექსტი -->
         <div class="letter-content">
-            <p class="letter-text">გილოცავ თასი დაბადების დღეს, მინდა რომ ყველაფერი საუკეთესო გისურვო მთელი გულით, იმიტორო იმსახურებ. ჩემთვის განსაკუთრებული ადამიანი ხარ და ეს შენც იცი, მარტო და არა, მესაიდუმლე, Biggest supporter, დაქალი, ხანდახან დედაც, იმიტორო სულ ჩემზე ზრუნავ<3
+            <p class="letter-text">გილოცავ თასი დაბადების დღეს, მინდა რომ ყველაფერი საუკეთესო გისურვო მთელი გულით, იმიტორო იმსახურებ. ჩემთვის განსაკუთრებული ადამიანი ხარ და ეს შენც იცი, მარტო და არა, მესაიდუმლე, Biggest supporter, დაქალი, ხანდახან დედაც, იმიტორო სულ ჩემზე ზრუნავ&lt;3
 
-            მოკლედ, უსაყვარლესი ხარ ჩემთვის და ზოგადად ყველასთვის, ყველაზე უშუალო, კეთილი და ჯიგარი ხარ. ეს ბოლო დროა ცოტა ანერვიულებული ხარ სამსახურის გამო და მესმის, ამიტომ სამყაროს ვთხოვ რომ კარიერულ გზაზე ხელი შეგიწყოს და ყველაფერი ისე გქონდეს, როგორც შენ წარმოიდგენ მომავალში, შენი შრომა აუცილებლად დაფასდება მე მჯერა ამის<3 თუ არაფერი არ გამოდის ანუ ღმერთი ბევრად უკეთეს რაღაცას გვიმზადებს მომავლისთვის. კარგი ეს ცოტა გამიგრძელდა მაგრამ პატარა მოტივაციისთვის გამოგადგება ჩემი აზრით<3
+            მოკლედ, უსაყვარლესი ხარ ჩემთვის და ზოგადად ყველასთვის, ყველაზე უშუალო, კეთილი და ჯიგარი ხარ. ეს ბოლო დროა ცოტა ანერვიულებული ხარ სამსახურის გამო და მესმის, ამიტომ სამყაროს ვთხოვ რომ კარიერულ გზაზე ხელი შეგიწყოს და ყველაფერი ისე გქონდეს, როგორც შენ წარმოიდგენ მომავალში, შენი შრომა აუცილებლად დაფასდება მე მჯერა ამის&lt;3 თუ არაფერი არ გამოდის ანუ ღმერთი ბევრად უკეთეს რაღაცას გვიმზადებს მომავლისთვის. კარგი ეს ცოტა გამიგრძელდა მაგრამ პატარა მოტივაციისთვის გამოგადგება ჩემი აზრით&lt;3
 
             მინდა რომ უბედნიერესი იყო მთელი ცხოვრება და ფერადი და ლაღი მომავალი გქონდეს, ცოტა გიჟური, როგორიც შენ ხარ. უზომოდ მიყვარხარ და მეამაყები. რომ მკითხონ შენთვის მისაბაძი ადამიანი ვინ არისო შენზე ვიტყვი. ხშირად ვერ გამოვხატავ ჩემს ემოციებს შენც იცი, მაგრამ მართლა უზომოდ მიყვარხარ და რასაც აკეთებ მეც მოტივაციას მაძლევს ეგ ყველაფერი ზოგადად, მინდა რომ შენთან ერთად ყველაფერი გავაკეთო, გინდ საქმეში, გინდ ისე.
 
             ძაან ძაან ძაან მიყვარხარ. ანათე და იკაშკაშე ვარსკვლავივით.
 
-            </p>
+            ვიცი რო აჩუყდი ამიტომ ბოლოს ამ ფოტოებს გიტოვებ რო გაგეცინოს:</p>
         </div>
 
-        <!-- 4. ბოლო სასაცილო ფოტო -->
+        <!-- 4. ბოლო სასაცილო ფოტოები -->
         <div class="funny-photo-container">
-            <!-- ჩასვი ბოლო სასაცილო ფოტოს ლინკი src-ში -->
-            <img class="funny-photo" src="FB_IMG_1707926595142.jpg" alt="Funny Moment">
+            <img class="funny-photo" src="FB_IMG_1707926595142.jpg" alt="Funny Moment 1">
         </div>
         <div class="funny-photo-container">
-            <!-- ჩასვი ბოლო სასაცილო ფოტოს ლინკი src-ში -->
-            <img class="funny-photo" src="IMG_20210828_101340_961.jpg" alt="Funny Moment">
+            <img class="funny-photo" src="IMG_20210828_101340_961.jpg" alt="Funny Moment 2">
         </div>
 
     </div>
+
+    <!-- პატარა სკრიპტი მუსიკის ჩასართავად/გამოსართავად -->
+    <script>
+        var audio = document.getElementById("myAudio");
+        var text = document.getElementById("music-text");
+        var isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                text.innerHTML = "ჩართე მუსიკა ✨";
+            } else {
+                audio.play().catch(function(error) {
+                    // ზოგიერთმა ბრაუზერმა მაინც შეიძლება დაბლოკოს, თუ პირველი ინტერაქცია არ არის
+                    console.log("Play blocked by browser: " + error);
+                    alert("ჯერ საიტზე სადმე დააჭირე და მერე ჩაირთვება მუსიკა 🎵");
+                });
+                text.innerHTML = "გამორთე 🎵";
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
 
 </body>
 </html>
